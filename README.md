@@ -1,2 +1,2 @@
-# data_assign_5, and previous assign3
-sentimental analysis using spark
+# data_assign_6, and previous assignments
+  The code for assignment 6 is the file "A6_source_code.py"
