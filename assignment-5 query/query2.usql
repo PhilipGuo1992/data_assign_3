@@ -1,0 +1,38 @@
+@searchlog =              
+    EXTRACT TCS_ID int,    
+            street_name string,
+            midblock_route string,
+            side1_route string,
+            side2_route string,
+            activation_date DateTime,
+            latitude double,
+            longitude double,
+            count_date DateTime,
+            vehicle_volume int,
+            pedestrian_volume int
+    FROM "/assign5data/rawdata.csv"
+    USING Extractors.Csv(encoding: Encoding.UTF8,skipFirstNRows:1);
+
+@query4 =
+    SELECT
+    latitude,
+    longitude,
+    [count_date].Year AS current_year,
+    (vehicle_volume + pedestrian_volume) AS traffic_volume
+    FROM @searchlog;
+
+@query5 = 
+    SELECT 
+    latitude,
+    longitude,
+    current_year,
+    traffic_volume
+    FROM @query4
+    WHERE
+    current_year > 2013
+    ORDER BY traffic_volume DESC
+    FETCH 10 ROWS;
+
+OUTPUT @query5
+    TO "/output/query3result.csv"
+    USING Outputters.Csv(outputHeader: true);

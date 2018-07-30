@@ -1,0 +1,25 @@
+@searchlog =              
+    EXTRACT TCS_ID int,    
+            street_name string,
+            midblock_route string,
+            side1_route string,
+            side2_route string,
+            activation_date DateTime,
+            latitude double,
+            longitude double,
+            count_date DateTime,
+            vehicle_volume int,
+            pedestrian_volume int
+    FROM "/assign5data/rawdata.csv"
+    USING Extractors.Csv(encoding: Encoding.UTF8,skipFirstNRows:1);
+
+@firstresult = 
+    SELECT 
+    street_name, 
+    AVG(vehicle_volume) AS avg_volume_Vehicles
+    FROM @searchlog
+    GROUP BY street_name;
+
+OUTPUT @firstresult
+    TO "/output/test-result.csv"
+    USING Outputters.Csv(outputHeader: true);
